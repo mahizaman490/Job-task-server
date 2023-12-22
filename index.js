@@ -59,13 +59,84 @@ async function run() {
     })
     
     
-    
+
+
+
+
+app.get('/task/:id', async(req,res) =>{
+
+const id =  req.params.id;
+const query = {_id: new ObjectId(id)}
+const result = await taskCollection.findOne(query);
+res.send(result);
+
+})
+
+
         app.post('/task',async(req,res)=>{
           const newProduct = req.body;
           console.log(newProduct);
           const result = await taskCollection.insertOne(newProduct);
           res.send(result);
         })
+
+
+
+
+//
+
+app.put('/task/:id', async(req,res) =>{
+  const id = req.params.id;
+  const filter = {_id: new ObjectId(id)}
+  const options = {upsert: true }; 
+  const UpdatedProduct = req.body;
+  const task= {
+    $set: {
+      name:UpdatedProduct.name,
+      price:UpdatedProduct.price,
+      type:UpdatedProduct.type,
+      description:UpdatedProduct.description
+
+    }
+
+  }
+
+  const result = await taskCollection.updateOne(filter, task,options);
+  res.send(result)
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
